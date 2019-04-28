@@ -17,7 +17,7 @@ object Nil: List<Nothing>()
 
 //5
 fun <T>elemento(l: List<T>, n: Int): T? = when(l){
-    is Node<T> -> if(n != 0) elemento(l, n-1) else l.head
+    is Node<T> -> if(n != 0) elemento(l.tail, n-1) else l.head
     else -> null
 }
 
@@ -186,10 +186,14 @@ fun primeiraMaiusAux(text: String, index: Int): String =
     }else 
         ""
 
-
+//31
+fun <T>seleciona(l1: List<T>, listIndex: List<Int>): List<T?> = when(listIndex){
+    is Node<Int> -> Node(elemento(l1, listIndex.head), seleciona(l1, listIndex.tail)) 
+    else -> Nil
+}
 
 fun main(){
-    //var a: List<Int> = Node(1,Node(10, Node(35, Node(24, Nil))))
-    //var b: List<Int> = Node(9, Node(7, Node(5, Node(1, Node(3, Nil)))))
-    println(primeiraMaius("pedro cunha"))
+    var a: List<Int> = Node(1,Node(10, Node(35, Node(24, Nil))))
+    var b: List<Int> = Node(2, Node(2, Node(3, Node(0, Nil))))
+    println(seleciona(a, b))
 }
