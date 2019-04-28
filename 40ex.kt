@@ -192,8 +192,23 @@ fun <T>seleciona(l1: List<T>, listIndex: List<Int>): List<T?> = when(listIndex){
     else -> Nil
 }
 
+//32
+
+
+//33
+fun primo(n: Int) = primoAux(n, 2)
+
+fun primoAux(n: Int, curr: Int): Boolean = 
+    if(n > curr){
+        if(n%curr == 0) false else primoAux(n, curr+1) 
+    } else true
+
+//34
+fun somaDigitos(n: Int) : Int = if(n>0) n%10 + somaDigitos(n/10) else 0
+
+
 fun main(){
-    var a: List<Int> = Node(1,Node(10, Node(35, Node(24, Nil))))
-    var b: List<Int> = Node(2, Node(2, Node(3, Node(0, Nil))))
-    println(seleciona(a, b))
+    //var a: List<Int> = Node(1,Node(10, Node(35, Node(24, Nil))))
+    //var b: List<Int> = Node(2, Node(2, Node(3, Node(0, Nil))))
+    println(somaDigitos(11))
 }
