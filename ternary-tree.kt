@@ -26,23 +26,16 @@ fun <T>concat(l: List<T>, l2: List<T>): List<T> = when(l){
     else -> l2
 }
 
-fun <T>fazListaEsq(t: Tree3<T>, n: Int): List<Tree3<T>> = when(t){
-    is NoArv<T> -> if(n > 0) if(n == 1) transforma(t, n -1) else fazListaEsq(t.l, n-1) else NoLista(t, vazio)
+fun <T>transforma(t: Tree3<T>, n: Int): List<Tree3<T>> = when(t){
+    is NoArv<T> -> 
+        if(n > 0) {
+            val l = transforma(t.l, n -1)
+            val m = transforma(t.m, n -1)
+            val r = transforma(t.r, n -1)
+            concat(concat(l,m), r)
+        } else NoLista(t, vazio)
     else -> vazio
 }
-fun <T>fazListaMeio(t: Tree3<T>, n: Int): List<Tree3<T>> = when(t){
-    is NoArv<T> -> if(n > 0) if(n == 1) transforma(t, n) else fazListaMeio(t.m, n-1) else concat(NoLista(t, vazio), concat(fazListaDir(t.m, n) , fazListaDir(t.r, n)))
-    else -> vazio
-}
-
-fun <T>fazListaDir(t: Tree3<T>, n: Int): List<Tree3<T>> = when(t){
-    is NoArv<T> -> if(n > 0) if(n == 1) transforma(t, n -1) else fazListaDir(t.r, n-1) else NoLista(t, vazio)
-    else -> vazio
-}
-
-fun <T>transforma(t: Tree3<T>, n: Int): List<Tree3<T>> =
-    if(t is NoArv<T>) concat(concat(fazListaEsq(t, n), fazListaMeio(t, n)), fazListaDir(t, n)) else vazio
-
 
 fun main(){
     val t = NoArv(20, NoArv(10, NoArv(8, Nulo, Nulo, Nulo), NoArv(10, Nulo, Nulo, Nulo), NoArv(12, NoArv(11, Nulo, Nulo, Nulo), NoArv(12, Nulo, Nulo, Nulo), NoArv(15, Nulo, Nulo, Nulo))), NoArv(20,NoArv(19, Nulo, Nulo, Nulo),NoArv(20, Nulo, Nulo, Nulo),NoArv(21, Nulo, Nulo, Nulo)), NoArv(30,NoArv(25, Nulo, Nulo, Nulo),NoArv(30, Nulo, Nulo, Nulo),NoArv(40, NoArv(35, Nulo, Nulo, Nulo), NoArv(40, Nulo, Nulo, Nulo), NoArv(50, Nulo, Nulo, Nulo))))
