@@ -12,18 +12,30 @@ fun somaNos(l: List<Int>): Int = when(l){
 }
 
 fun <T>filter(l: List<T>, f: (T) -> Boolean): List<T> =when(l){
-    l is Node-> if(f(l.head)) NoLista(l.head, filter(l.tail)) else filter(l.tail)
+    is NoLista<T> -> if(f(l.head)) NoLista(l.head, filter(l.tail, f)) else filter(l.tail, f)
     else -> vazio
 }
 
 fun removePar(l: List<Int>) = filter(l, {x: Int -> x%2!=0 })
 
-fun <T>intercala(l: List<T>, l2: List<T>) = when{
-    l is Node -> Node(l.head, intercala(l2, l.tail))
+fun <T>intercala(l: List<T>, l2: List<T>): List<T> = when{
+    l is NoLista<T> -> NoLista<T>(l.head, intercala(l2, l.tail))
     else -> l2
 }
 
+fun <T>verificaSequencia(l: List<T>, l2: List<T>): Boolean = when(l){
+    is NoLista<T> -> if (l2 is NoLista<T>) {
+        if(l2.head == l.head) checa(l, l2) else verificaSequencia(l.tail, l2)
+    } else false
+    else -> false
+}
 
+fun <T>checa(l1: List<T>, l2: List<T>): Boolean = when(l2){
+    is NoLista<T>-> if(l1 is NoLista<T>)
+         if(l1.head == l2.head) checa(l1.tail, l2.tail) else false 
+        else false
+    else -> true
+}
 
 
 abstract class Tree3<out T>
@@ -63,18 +75,9 @@ fun <T>transforma(t: Tree3<T>, n: Int): List<Tree3<T>> = when(t){
     else -> vazio
 }
 
-fun <T>verifica(t: Tree3<T>, t2: Tree3<T>): Boolean = when{
-    t is NoArv<T> && t2 is NoArv<T> -> if(t.head != t2.head) false else checaFilhos(t, t2, true)
-    else -> true
-}
-
-fun checaFilhos(t: Tree3<T>, t2: Tree3<T>, flag: Boolean) -> when(t){
-    is NoArv<T> ->{
-        val a: Boolean = checaFilhos(t2.esq)
-    }
-}
-
 fun main(){
-    val t = NoArv(20, NoArv(10, NoArv(8, Nulo, Nulo, Nulo), NoArv(10, Nulo, Nulo, Nulo), NoArv(12, NoArv(11, Nulo, Nulo, Nulo), NoArv(12, Nulo, Nulo, Nulo), NoArv(15, Nulo, Nulo, Nulo))), NoArv(20,NoArv(19, Nulo, Nulo, Nulo),NoArv(20, Nulo, Nulo, Nulo),NoArv(21, Nulo, Nulo, Nulo)), NoArv(30,NoArv(25, Nulo, Nulo, Nulo),NoArv(30, Nulo, Nulo, Nulo),NoArv(40, NoArv(35, Nulo, Nulo, Nulo), NoArv(40, Nulo, Nulo, Nulo), NoArv(50, Nulo, Nulo, Nulo))))
-    println(transforma(t, 2))
+    //val t = NoArv(20, NoArv(10, NoArv(8, Nulo, Nulo, Nulo), NoArv(10, Nulo, Nulo, Nulo), NoArv(12, NoArv(11, Nulo, Nulo, Nulo), NoArv(12, Nulo, Nulo, Nulo), NoArv(15, Nulo, Nulo, Nulo))), NoArv(20,NoArv(19, Nulo, Nulo, Nulo),NoArv(20, Nulo, Nulo, Nulo),NoArv(21, Nulo, Nulo, Nulo)), NoArv(30,NoArv(25, Nulo, Nulo, Nulo),NoArv(30, Nulo, Nulo, Nulo),NoArv(40, NoArv(35, Nulo, Nulo, Nulo), NoArv(40, Nulo, Nulo, Nulo), NoArv(50, Nulo, Nulo, Nulo))))
+    val a: List<Int> = NoLista(1, NoLista(2, NoLista(3, NoLista(4, NoLista(5, NoLista(6, vazio))))))
+    val b: List<Int> = NoLista(3, NoLista(4, NoLista(5, vazio)))
+    println(verificaSequencia(a,b))
 }
