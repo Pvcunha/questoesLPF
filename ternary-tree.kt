@@ -1,5 +1,31 @@
 package tree
 
+abstract class List<out T>
+data class NoLista<T>(val head: T, val tail: List<T>): List<T>()
+object vazio: List<Nothing>()
+
+//1
+
+fun somaNos(l: List<Int>): Int = when(l){
+    is NoLista<Int> -> l.head + somaNos(l.tail)
+    else -> 0
+}
+
+fun <T>filter(l: List<T>, f: (T) -> Boolean): List<T> =when(l){
+    l is Node-> if(f(l.head)) NoLista(l.head, filter(l.tail)) else filter(l.tail)
+    else -> vazio
+}
+
+fun removePar(l: List<Int>) = filter(l, {x: Int -> x%2!=0 })
+
+fun <T>intercala(l: List<T>, l2: List<T>) = when{
+    l is Node -> Node(l.head, intercala(l2, l.tail))
+    else -> l2
+}
+
+
+
+
 abstract class Tree3<out T>
 data class NoArv<T>(val i: T, val l: Tree3<T>, val m: Tree3<T>, val r: Tree3<T>): Tree3<T>()
 object Nulo: Tree3<Nothing>()
@@ -17,9 +43,9 @@ fun <T>altura(t: Tree3<T>): Int = when(t){
     else -> -1
 }
 
-abstract class List<out T>
-data class NoLista<T>(val head: T, val tail: List<T>): List<T>()
-object vazio: List<Nothing>()
+
+
+
 
 fun <T>concat(l: List<T>, l2: List<T>): List<T> = when(l){
     is NoLista<T> -> NoLista(l.head, concat(l.tail, l2))
@@ -35,6 +61,17 @@ fun <T>transforma(t: Tree3<T>, n: Int): List<Tree3<T>> = when(t){
             concat(concat(l,m), r)
         } else NoLista(t, vazio)
     else -> vazio
+}
+
+fun <T>verifica(t: Tree3<T>, t2: Tree3<T>): Boolean = when{
+    t is NoArv<T> && t2 is NoArv<T> -> if(t.head != t2.head) false else checaFilhos(t, t2, true)
+    else -> true
+}
+
+fun checaFilhos(t: Tree3<T>, t2: Tree3<T>, flag: Boolean) -> when(t){
+    is NoArv<T> ->{
+        val a: Boolean = checaFilhos(t2.esq)
+    }
 }
 
 fun main(){
