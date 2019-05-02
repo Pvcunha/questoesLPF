@@ -119,8 +119,12 @@ fun seqAux(n: Int, curr: Int, m: Int, l: List<Int>): List<Int> = if(n > curr) se
 
 //24
 fun insereOrdenado(l: List<Int>, e: Int): List<Int> = when(l){
-    is Node<Int> -> if(e > l.head) Node(l.head, Node(e, insereOrdenado(l.tail, e))) else Node(l.head, insereOrdenado(l.tail, e))
-    else -> Nil
+    is Node<Int> -> {
+        if(e > l.head){
+            Node(l.head, insereOrdenado(l.tail, e))
+        } else Node(e, l)
+    }
+    else -> Node(e, Nil)
 }
 
 //25
@@ -138,11 +142,30 @@ fun ordenadoAux(l: List<Int>, n: Int): Boolean = when(l){
     else -> if(n == 0 || n == 1) true else false 
 }
 
+//26
+fun ordenaLista(l: List<Int>): List<Int> = ordenaListaAux(l, Nil)
+
+ fun ordenaListaAux(l1: List<Int>, l2: List<Int>): List<Int> = when(l1){
+    is Node -> {
+        println(l2) 
+        ordenaListaAux(l1.tail, insereOrdenado(l2, l1.head))
+    }
+    else -> l2
+}
+
 //27
 fun <T>rodaEsq(l: List<T>, n: Int): List<T> = when(l){
-    is Node<T> -> if(n > 0) concat(rodaEsq(l.tail, n-1), Node(l.head, Nil)) else l
+    is Node<T> -> rodaAux(l, Nil, n)
     else -> Nil
 }
+
+fun <T>rodaAux(l: List<T>, l1: List<T>, n: Int): List<T> = when(l){
+    is Node -> if(n > 0) rodaAux(l.tail, add(l1, l.head), n - 1) else concat(l, l1)
+    else -> Nil
+}
+
+
+fun <T>add(l:List<T>, e: T): List<T> = if(l is Node<T>) Node(l.head, add(l.tail, e)) else Node(e, Nil)  
 
 /* fun <T>reverse(l: List<T>): List<T> = when(l){
     is Node-> concat(reverse(l.tail), Node(l.head, Nil))
@@ -208,7 +231,7 @@ fun somaDigitos(n: Int) : Int = if(n>0) n%10 + somaDigitos(n/10) else 0
 
 
 fun main(){
-    //var a: List<Int> = Node(1,Node(10, Node(35, Node(24, Nil))))
-    //var b: List<Int> = Node(2, Node(2, Node(3, Node(0, Nil))))
-    println(somaDigitos(11))
+    var a: List<Int> = Node(1,Node(10, Node(35, Node(24, Nil))))
+    //var b: List<Int> = Node(1, Node(10, Node(16, Node(25, Nil))))
+    println(ordenaLista(a))
 }
